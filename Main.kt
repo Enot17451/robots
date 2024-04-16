@@ -1,6 +1,35 @@
-fun main(){
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            a()
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun a() {
     var game = Game()
-    game.printGame()
+    var screen by remember { mutableStateOf(Screen.main) }
+    Column(Modifier){
+        Text(text = game.printGame())
+        Row {
+            Button(onClick = { screen = Screen.garage}) {
+                Text(text = "Garage")
+            }
+            Button(onClick = { screen = Screen.shop }) {
+                Text(text = "Shop")
+            }
+            Button(onClick = { screen = Screen.gate}) {
+                Text(text = "Gate")
+            }
+        }
+    }
+}
+
+enum class Screen{
+    main,garage,shop,gate
 }
 
 class Game{
@@ -13,7 +42,8 @@ class Game{
 
     fun printGame():String{
         return if(!isGameEnd()){
-            "День ${player.day}"
+            "День ${player.day}\n" +
+                    "Минералы ${player.minerals}"
         }else{
             "Игра окончена"
         }
